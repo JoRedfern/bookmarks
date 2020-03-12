@@ -1,9 +1,9 @@
 require 'sinatra/base'
-require './lib/bookmarks'
+require_relative './lib/bookmarks'
 
 class BookmarkManager < Sinatra::Base
   enable :sessions, :method_override
-  
+
   get '/' do
     'Bookmark Manager'
   end
@@ -23,8 +23,7 @@ class BookmarkManager < Sinatra::Base
   end
 
   delete '/bookmarks/:id' do
-    connection = PG.connect(dbname: 'bookmark_manager')
-    connection.exec("DELETE FROM bookmarks WHERE id = #{params['id']}")
+    Bookmark.delete(id: params[:id])
     redirect '/bookmarks'
   end
 
